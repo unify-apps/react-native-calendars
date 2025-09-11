@@ -228,6 +228,7 @@ const Calendar = props => {
       </View>
     );
   };
+
   const renderWeek = (days, id) => {
     if (renderWeekProp) {
       return renderWeekProp(days, id, currentMonth);
