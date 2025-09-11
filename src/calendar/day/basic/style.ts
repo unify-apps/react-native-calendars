@@ -1,10 +1,10 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as defaultStyle from '../../../style';
-import {Theme} from '../../../types';
+import { Theme } from '../../../types';
 import constants from '../../../commons/constants';
 
 export default function styleConstructor(theme: Theme = {}) {
-  const appStyle = {...defaultStyle, ...theme};
+  const appStyle = { ...defaultStyle, ...theme };
   return StyleSheet.create({
     container: {
       alignSelf: 'stretch',
@@ -23,7 +23,6 @@ export default function styleConstructor(theme: Theme = {}) {
       backgroundColor: appStyle.selectedDayBackgroundColor,
       borderRadius: 16
     },
-    
     text: {
       fontSize: appStyle.textDayFontSize,
       fontFamily: appStyle.textDayFontFamily,
@@ -45,7 +44,7 @@ export default function styleConstructor(theme: Theme = {}) {
     inactiveText: {
       color: appStyle.textInactiveColor
     },
-    
-    ...(theme['stylesheet.day.basic'] || {})
+
+    ...theme['stylesheet.day.basic']
   });
 }

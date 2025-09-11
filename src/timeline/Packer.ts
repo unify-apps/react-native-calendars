@@ -1,9 +1,9 @@
 import inRange from 'lodash/inRange';
 import XDate from 'xdate';
 import constants from '../commons/constants';
-import {Event, PackedEvent} from './EventBlock';
+import { Event, PackedEvent } from './EventBlock';
 
-type PartialPackedEvent = Event & {index: number};
+type PartialPackedEvent = Event & { index: number };
 interface PopulateOptions {
   screenWidth?: number;
   dayStart?: number;
@@ -41,7 +41,7 @@ function getEventDuration(event) {
 
 // build event with proper positioning and z-index for layering
 // shorter events get higher z-index to appear on top of longer ones
-function buildEvent(event, left, width, {dayStart = 0, hourBlockHeight = HOUR_BLOCK_HEIGHT}, zIndex = 0) {
+function buildEvent(event, left, width, { dayStart = 0, hourBlockHeight = HOUR_BLOCK_HEIGHT }, zIndex = 0) {
   const startTime = new XDate(event.start);
   const endTime = event.end ? new XDate(event.end) : new XDate(startTime).addHours(1);
   const dayStartTime = new XDate(startTime).clearTime();
@@ -148,7 +148,7 @@ export function populateEvents(_events, populateOptions) {
   // sort events by start time, then by duration (shorter first) for consistent positioning
   // this helps ensure shorter events are processed in a way that promotes proper layering
   const events = _events
-    .map((ev, index) => ({...ev, index: index}))
+    .map((ev, index) => ({ ...ev, index: index }))
     .sort(function (a, b) {
       // primary sort: by start time
       if (a.start < b.start) return -1;
@@ -205,7 +205,7 @@ export function populateEvents(_events, populateOptions) {
 // build unavailable hours blocks for visual representation
 // this creates the grayed-out areas for unavailable time slots
 export function buildUnavailableHoursBlocks(unavailableHours = [], options) {
-  const {hourBlockHeight = HOUR_BLOCK_HEIGHT, dayStart = 0, dayEnd = 24} = options || {};
+  const { hourBlockHeight = HOUR_BLOCK_HEIGHT, dayStart = 0, dayEnd = 24 } = options || {};
   const totalDayHours = dayEnd - dayStart;
   const totalDayHeight = (dayEnd - dayStart) * hourBlockHeight;
   return (

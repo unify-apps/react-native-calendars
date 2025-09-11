@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as defaultStyle from '../style';
-import {Theme} from '../types';
+import { Theme } from '../types';
 import constants from '../commons/constants';
 
 const LINE_COLOR = '#D8D8D8';
@@ -10,7 +10,7 @@ const NOW_INDICATOR_COLOR = 'red';
 const UNAVAILABLE_HOURS_BLOCK_COLOR = '#F8F9FA';
 
 export default function styleConstructor(theme: Theme = {}, calendarHeight: number) {
-  const appStyle = {...defaultStyle, ...theme};
+  const appStyle = { ...defaultStyle, ...theme };
 
   return StyleSheet.create({
     container: {
@@ -67,6 +67,13 @@ export default function styleConstructor(theme: Theme = {}, calendarHeight: numb
       textAlign: 'center',
       ...appStyle.timeLabel,
       position: 'absolute'
+    },
+    allDayLabelText: {
+      fontSize: 12,
+      color: '#6B7280',
+      fontWeight: '500',
+      fontFamily: constants.isIOS ? 'Helvetica Neue' : 'Roboto',
+      ...appStyle.allDayLabelText
     },
     unavailableHoursBlock: {
       position: 'absolute',

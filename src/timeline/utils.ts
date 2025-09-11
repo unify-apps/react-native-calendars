@@ -1,4 +1,4 @@
-import {getCalendarDateString} from '../services';
+import { getCalendarDateString } from '../services';
 
 // helper function to create event segments for multi-day events with proper time boundaries
 // start day: from start time to end of day

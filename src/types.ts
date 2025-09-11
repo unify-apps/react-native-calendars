@@ -1,6 +1,6 @@
-import {ViewStyle, TextStyle} from 'react-native';
-import {MarkingProps} from './calendar/day/marking';
-import {CalendarContextProps} from './expandableCalendar/Context';
+import { ViewStyle, TextStyle } from 'react-native';
+import { MarkingProps } from './calendar/day/marking';
+import { CalendarContextProps } from './expandableCalendar/Context';
 
 export type ContextProp = {
   context?: CalendarContextProps;
@@ -30,6 +30,7 @@ export interface Theme {
   nowIndicatorLine?: object;
   nowIndicatorKnob?: object;
   timeLabel?: object;
+  allDayLabelText?: object;
   todayTextColor?: string;
   calendarBackground?: string;
   indicatorColor?: string;
