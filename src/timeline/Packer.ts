@@ -99,9 +99,11 @@ function packOverlappingEventGroup(columns, calculatedEvents, populateOptions) {
       const columnSpan = calcColumnSpan(event, columnIndex, columns);
       const eventLeft = (columnIndex / columns.length) * totalWidth;
       let eventWidth = totalWidth * (columnSpan / columns.length);
-      if (columnIndex + columnSpan <= columns.length - 1) {
-        eventWidth -= overlapEventsSpacing;
-      }
+
+      // tocheck: if this is even required.
+      // if (columnIndex + columnSpan <= columns.length - 1) {
+      //   eventWidth -= overlapEventsSpacing;
+      // }
 
       eventsInGroup.push({
         event,
