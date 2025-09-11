@@ -1,6 +1,6 @@
 {
   "name": "@unifyapps/react-native-calendars",
-  "version": "1.22.0-ua",
+  "version": "1.22.0-ua.1",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "description": "React Native Calendar Components",
@@ -30,6 +30,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "src",
+    "index.d.ts"
+  ],
   "author": "Wix.com",
   "license": "MIT",
   "dependencies": {

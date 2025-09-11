@@ -40,7 +40,7 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
-
+.history/
 # node.js
 #
 node_modules/
