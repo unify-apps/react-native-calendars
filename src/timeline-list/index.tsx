@@ -61,6 +61,9 @@ export interface TimelineListProps {
   initialTime?: TimelineProps['initialTime'];
 
   scrollViewProps?: ScrollViewProps;
+
+  pageHeight?: number;
+  pageWidth?: number;
 }
 
 const TimelineList = (props: TimelineListProps) => {
@@ -72,7 +75,9 @@ const TimelineList = (props: TimelineListProps) => {
     scrollToFirst,
     scrollToNow,
     initialTime,
-    scrollViewProps
+    scrollViewProps,
+    pageHeight,
+    pageWidth
   } = props;
   const shouldFixRTL = useMemo(() => constants.isRTL && (constants.isRN73() || constants.isAndroid), []); // isHorizontal = true
   const {date, updateSource, setDate, numberOfDays = 1, timelineLeftInset} = useContext(Context);
@@ -211,6 +216,8 @@ const TimelineList = (props: TimelineListProps) => {
       onReachNearEdge={onReachNearEdge}
       onReachNearEdgeThreshold={NEAR_EDGE_THRESHOLD}
       onScroll={onScroll}
+      pageWidth={pageWidth}
+      pageHeight={pageHeight}
       extendedState={{todayEvents: events[date], pages}}
       initialOffset={initialOffset}
       scrollViewProps={{
