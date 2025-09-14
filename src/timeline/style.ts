@@ -88,13 +88,13 @@ export default function styleConstructor(theme: Theme = {}, calendarHeight: numb
       backgroundColor: '#F0F4FF',
       borderColor: '#DDE5FD',
       borderWidth: 1,
+      minHeight: 25,
       ...appStyle.event,
       position: 'absolute',
       flex: 1,
       flexDirection: 'column',
       alignItems: 'flex-start',
-      overflow: 'hidden',
-      minHeight: 25
+      overflow: 'hidden'
     },
     eventTitle: {
       color: EVENT_TEXT_COLOR,
