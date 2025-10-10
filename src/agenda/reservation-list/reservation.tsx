@@ -2,14 +2,15 @@ import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 
-import {isToday} from '../../dateutils';
-import {getDefaultLocale} from '../../services';
-import {RESERVATION_DATE} from '../../testIDs';
+import { isToday } from '../../dateutils';
+import { getDefaultLocale } from '../../services';
+import { RESERVATION_DATE } from '../../testIDs';
 import styleConstructor from './style';
-import {Theme, AgendaEntry} from '../../types';
+import { Theme, AgendaEntry } from '../../types';
+import { JSX } from 'react';
 
 
 export interface ReservationProps {
@@ -53,7 +54,7 @@ class Reservation extends Component<ReservationProps> {
     const d2 = nextProps.date;
     const r1 = this.props.item;
     const r2 = nextProps.item;
-    
+
     let changed = true;
     if (!d1 && !d2) {
       changed = false;
@@ -74,7 +75,7 @@ class Reservation extends Component<ReservationProps> {
   }
 
   renderDate() {
-    const {item, date, renderDay} = this.props;
+    const { item, date, renderDay } = this.props;
 
     if (isFunction(renderDay)) {
       return renderDay(date, item);
@@ -95,12 +96,12 @@ class Reservation extends Component<ReservationProps> {
         </View>
       );
     }
-    return <View style={this.style.day}/>;
+    return <View style={this.style.day} />;
   }
 
   render() {
-    const {item, date, renderItem, renderEmptyDate} = this.props;
-    
+    const { item, date, renderItem, renderEmptyDate } = this.props;
+
     let content;
     if (item) {
       const firstItem = date ? true : false;
