@@ -9,6 +9,7 @@ export interface Event {
   title: string;
   summary?: string;
   color?: string;
+  allDay?: boolean;
 }
 
 export interface PackedEvent extends Event {
@@ -30,7 +31,7 @@ export interface EventBlockProps {
 }
 
 const TEXT_LINE_HEIGHT = 17;
-const EVENT_DEFAULT_COLOR = '#add8e6';
+// const EVENT_DEFAULT_COLOR = '#add8e6';
 
 const EventBlock = (props: EventBlockProps) => {
   const { index, event, renderEvent, onPress, format24h, styles } = props;
@@ -51,7 +52,7 @@ const EventBlock = (props: EventBlockProps) => {
       padding: 0,
       margin: 0,
       overflow: 'hidden',
-    };
+    } as ViewStyle;
   }, [event]);
   const _onPress = useCallback(() => {
     onPress(index);

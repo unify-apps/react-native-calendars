@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
 import * as defaultStyle from '../../../style';
+import { Theme } from '../../../types';
 // our ds use 40 px height for the day container
 const FILLER_HEIGHT = 40;
-export default function styleConstructor(theme = {}) {
+export default function styleConstructor(theme:Theme = {}) {
   const appStyle = {...defaultStyle, ...theme};
   return StyleSheet.create({
     container: {

@@ -1,11 +1,19 @@
-import { getCalendarDateString } from '../services';
+import {getCalendarDateString} from '../services';
+import {Event} from './EventBlock';
+
+interface EventSegment extends Event {
+  segmentDate: string;
+  isEventSegment: boolean;
+  originalEvent?: Event;
+  dayType?: 'start' | 'middle' | 'end';
+}
 
 // helper function to create event segments for multi-day events with proper time boundaries
 // start day: from start time to end of day
 // middle days: full day (00:00 to 23:59)
 // end day: from start of day to end time
-export const createEventSegments = (events, pageDates) => {
-  const segments = [];
+export const createEventSegments = (events: Event[], pageDates: string[]): EventSegment[] => {
+  const segments: EventSegment[] = [];
 
   events.forEach(event => {
     if (!event.start || !event.end) {

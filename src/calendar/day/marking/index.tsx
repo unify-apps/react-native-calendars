@@ -1,11 +1,11 @@
 import filter from 'lodash/filter';
-import React, {useRef} from 'react';
-import {View, ViewStyle, TextStyle, StyleProp} from 'react-native';
+import React, { useRef } from 'react';
+import { View, ViewStyle, TextStyle, StyleProp } from 'react-native';
 
-import {Theme, MarkingTypes} from '../../../types';
-import {extractDotProps} from '../../../componentUpdater';
+import { Theme, MarkingTypes } from '../../../types';
+import { extractDotProps } from '../../../componentUpdater';
 import styleConstructor from './style';
-import Dot, {DotProps} from '../dot';
+import Dot, { DotProps } from '../dot';
 
 export enum Markings {
   DOT = 'dot',
@@ -56,10 +56,12 @@ export interface MarkingProps extends DotProps {
   endingDay?: boolean;
   accessibilityLabel?: string;
   customStyles?: CustomStyle;
+  isWeekEnd?: boolean;
+  isWeekStart?: boolean;
 }
 
 const Marking = (props: MarkingProps) => {
-  const {theme, type, dots, periods, selected, dotColor} = props;
+  const { theme, type, dots, periods, selected, dotColor } = props;
   const style = useRef(styleConstructor(theme));
 
   const getItems = (items?: DOT[] | PERIOD[]) => {
@@ -91,7 +93,7 @@ const Marking = (props: MarkingProps) => {
   };
 
   const renderPeriod = (index: number, item: any) => {
-    const {color, startingDay, endingDay} = item;
+    const { color, startingDay, endingDay } = item;
     const styles = [
       style.current.period,
       {
@@ -104,7 +106,7 @@ const Marking = (props: MarkingProps) => {
     if (endingDay) {
       styles.push(style.current.endingDay);
     }
-    return <View key={index} style={styles}/>;
+    return <View key={index} style={styles} />;
   };
 
   const renderDot = (index?: number, item?: any) => {
@@ -119,7 +121,7 @@ const Marking = (props: MarkingProps) => {
       color = selected && item.selectedDotColor ? item.selectedDotColor : item.color;
     }
 
-    return <Dot {...dotProps} key={key} color={color}/>;
+    return <Dot {...dotProps} key={key} color={color} />;
   };
 
   return renderMarkingByType();

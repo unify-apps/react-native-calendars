@@ -1,21 +1,21 @@
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
 import isEmpty from 'lodash/isEmpty';
-import React, {useRef, useState, useEffect, useCallback, useMemo, useImperativeHandle} from 'react';
-import {AccessibilityInfo, View, ViewStyle, StyleProp} from 'react-native';
+import React, { useRef, useState, useEffect, useCallback, useMemo, useImperativeHandle } from 'react';
+import { View, ViewStyle, StyleProp } from 'react-native';
 // @ts-expect-error
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import constants from '../commons/constants';
-import {xdateToData, parseDate, toMarkingFormat} from '../interface';
-import {getState} from '../day-state-manager';
-import {extractHeaderProps, extractDayProps} from '../componentUpdater';
-import {DateData, Theme, MarkedDates, ContextProp} from '../types';
-import {useDidUpdate} from '../hooks';
+import { xdateToData, parseDate, toMarkingFormat } from '../interface';
+import { getState } from '../day-state-manager';
+import { extractHeaderProps, extractDayProps } from '../componentUpdater';
+import { DateData, Theme, MarkedDates, ContextProp } from '../types';
+import { useDidUpdate } from '../hooks';
 import styleConstructor from './style';
-import CalendarHeader, {CalendarHeaderProps} from './header';
-import Day, {DayProps} from './day/index';
+import CalendarHeader, { CalendarHeaderProps } from './header';
+import Day, { DayProps } from './day/index';
 import BasicDay from './day/basic';
-import {page, isGTE, isLTE, sameMonth, isPreviousMonth} from '../dateutils';
+import { page, isGTE, isLTE, sameMonth, isPreviousMonth } from '../dateutils';
 export interface CalendarProps extends CalendarHeaderProps, DayProps {
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
@@ -60,7 +60,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   /** Test ID */
   testID?: string;
   /** ref to control the month switching from outside */
-  calendarRef?: React.RefObject<{updateMonth: (month: XDate) => void}>;
+  calendarRef?: React.RefObject<{ updateMonth: (month: XDate) => void }>;
   /** props to control the gesture component */
   gestureComponentProps?: any;
   /** render a custom week */
@@ -72,7 +72,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendars.js
  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar.gif
  */
-const Calendar = props => {
+const Calendar = (props: CalendarProps & ContextProp) => {
   const {
     initialDate,
     current,
@@ -106,7 +106,7 @@ const Calendar = props => {
   );
   const style = useMemo(() => styleConstructor(theme), [theme]);
   const header = useRef();
-  const weekNumberMarking = useRef({disabled: true, disableTouchEvent: true});
+  const weekNumberMarking = useRef({ disabled: true, disableTouchEvent: true });
   useImperativeHandle(calendarRef, () => ({
     updateMonth
   }));
@@ -121,7 +121,7 @@ const Calendar = props => {
     onVisibleMonthsChange?.([xdateToData(_currentMonth)]);
   }, [currentMonth]);
   const updateMonth = useCallback(
-    newMonth => {
+    (newMonth: XDate) => {
       if (sameMonth(newMonth, currentMonth)) {
         return;
       }
@@ -130,14 +130,14 @@ const Calendar = props => {
     [currentMonth]
   );
   const addMonth = useCallback(
-    count => {
+    (count: number) => {
       const newMonth = currentMonth.clone().addMonths(count, true);
       updateMonth(newMonth);
     },
     [currentMonth, updateMonth]
   );
   const handleDayInteraction = useCallback(
-    (date, interaction) => {
+    (date: DateData, interaction?: (date: DateData) => void) => {
       const day = new XDate(date.dateString);
       if (
         allowSelectionOutOfRange ||
@@ -154,7 +154,7 @@ const Calendar = props => {
     [minDate, maxDate, allowSelectionOutOfRange, disableMonthChange, updateMonth]
   );
   const _onDayPress = useCallback(
-    date => {
+    (date: DateData) => {
       if (date) handleDayInteraction(date, onDayPress);
     },
     [handleDayInteraction, onDayPress]
@@ -175,7 +175,7 @@ const Calendar = props => {
   }, [header]);
   const onSwipe = useCallback(
     gestureName => {
-      const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+      const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
       switch (gestureName) {
         case SWIPE_UP:
         case SWIPE_DOWN:
@@ -209,7 +209,7 @@ const Calendar = props => {
     // if user asks to hide extra days, we hide the days that are not in the current month
     // if user asks to show six weeks, we hide the days that are in the previous month.
     if ((!sameMonth(day, currentMonth) && hideExtraDays) || (isPreviousMonth(day, currentMonth) && showSixWeeks)) {
-      return <View key={id} style={style.emptyDayContainer}/>;
+      return <View key={id} style={style.emptyDayContainer} />;
     }
     const dayProps = extractDayProps(props);
     const dateString = toMarkingFormat(day);
@@ -229,29 +229,30 @@ const Calendar = props => {
     );
   };
 
-  const renderWeek = (days, id) => {
+  const renderWeek = (days: XDate[], id: number) => {
     if (renderWeekProp) {
-      return renderWeekProp(days, id, currentMonth);
+      // todo: fix this type.
+      return renderWeekProp(days as unknown as Date[], id, currentMonth) as JSX.Element;
     }
-    const week = [];
-    days.forEach((day, id2) => {
-      week.push(renderDay(day, id2));
+    const weeks: JSX.Element[] = [];
+    days.forEach((day: XDate, id2: number) => {
+      weeks.push(renderDay(day, id2));
     }, this);
     if (props.showWeekNumbers) {
-      week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
+      weeks.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
     }
     return (
       <View style={style.week} key={id}>
-        {week}
+        {weeks}
       </View>
     );
   };
   const renderMonth = () => {
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
     const days = page(currentMonth, firstDay, shouldShowSixWeeks);
-    const weeks = [];
+    const weeks: JSX.Element[] = [];
     while (days.length) {
-      weeks.push(renderWeek(days.splice(0, 7), weeks.length));
+      weeks.push(renderWeek(days.splice(0, 7) as XDate[], weeks.length));
     }
     return <View style={style.monthView}>{weeks}</View>;
   };

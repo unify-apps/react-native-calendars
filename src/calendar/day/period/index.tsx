@@ -30,7 +30,7 @@ type MarkingStyle = {
   day?: ViewStyle;
 }
 
-const PeriodDay = (props) => {
+const PeriodDay = (props: PeriodDayProps) => {
 
   // in most cases we will have range calendar covering the entire screen.
   // so we need to calculate the gap between the days to make the calendar look good.
@@ -59,7 +59,7 @@ const PeriodDay = (props) => {
     return disableTouch;
   };
   const markingStyle = useMemo(() => {
-    const defaultStyle = { textStyle: {}, containerStyle: {} };
+    const defaultStyle: MarkingStyle = { textStyle: {}, containerStyle: {} };
     if (!marking) {
       return defaultStyle;
     }
@@ -138,8 +138,8 @@ const PeriodDay = (props) => {
     return textStyle;
   }, [marking, isDisabled, isInactive, isToday]);
   const fillerStyles = useMemo(() => {
-    const leftFillerStyle = { backgroundColor: undefined };
-    const rightFillerStyle = { backgroundColor: undefined };
+    const leftFillerStyle: ViewStyle = { backgroundColor: undefined };
+    const rightFillerStyle: ViewStyle = { backgroundColor: undefined };
     let fillerStyle = {};
     const start = markingStyle.startingDay;
     const end = markingStyle.endingDay;
