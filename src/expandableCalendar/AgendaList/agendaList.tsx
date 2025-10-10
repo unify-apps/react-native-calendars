@@ -229,7 +229,6 @@ const AgendaList = forwardRef((props: AgendaListProps, ref: any) => {
     <SectionList
       stickySectionHeadersEnabled
       {...props}
-      // @ts-expect-error
       ref={list}
       keyExtractor={_keyExtractor}
       showsVerticalScrollIndicator={false}

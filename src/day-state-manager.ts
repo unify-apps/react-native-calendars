@@ -1,5 +1,6 @@
-const {isToday, isDateNotInRange, sameMonth} = require('./dateutils');
-const {toMarkingFormat} = require('./interface');
+import {isToday, isDateNotInRange, sameMonth} from './dateutils';
+import {toMarkingFormat} from './interface';
+import XDate from 'xdate';
 
 export function getState(day: XDate, current: XDate, props: any, disableDaySelection: boolean) {
   const {minDate, maxDate, disabledByDefault, disabledByWeekDays, context} = props;

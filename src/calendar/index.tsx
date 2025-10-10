@@ -16,6 +16,8 @@ import CalendarHeader, { CalendarHeaderProps } from './header';
 import Day, { DayProps } from './day/index';
 import BasicDay from './day/basic';
 import { page, isGTE, isLTE, sameMonth, isPreviousMonth } from '../dateutils';
+import { JSX } from 'react';
+
 export interface CalendarProps extends CalendarHeaderProps, DayProps {
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
@@ -105,7 +107,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     current || initialDate ? parseDate(current || initialDate) : new XDate()
   );
   const style = useMemo(() => styleConstructor(theme), [theme]);
-  const header = useRef();
+  const header = useRef(null);
   const weekNumberMarking = useRef({ disabled: true, disableTouchEvent: true });
   useImperativeHandle(calendarRef, () => ({
     updateMonth

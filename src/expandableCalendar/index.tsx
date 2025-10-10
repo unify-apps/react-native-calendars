@@ -29,18 +29,18 @@ import {
   type LayoutChangeEvent
 } from 'react-native';
 
-import {page} from '../dateutils';
-import {parseDate, toMarkingFormat} from '../interface';
-import {DateData, Direction} from '../types';
-import styleConstructor, {KNOB_CONTAINER_HEIGHT} from './style';
+import { page } from '../dateutils';
+import { parseDate, toMarkingFormat } from '../interface';
+import { DateData, Direction } from '../types';
+import styleConstructor, { KNOB_CONTAINER_HEIGHT } from './style';
 import WeekDaysNames from '../commons/WeekDaysNames';
 import Calendar from '../calendar';
-import CalendarList, {CalendarListProps} from '../calendar-list';
+import CalendarList, { CalendarListProps } from '../calendar-list';
 import Week from './week';
 import WeekCalendar from './WeekCalendar';
 import Context from './Context';
 import constants from '../commons/constants';
-import {UpdateSources, CalendarNavigationTypes} from './commons';
+import { UpdateSources, CalendarNavigationTypes } from './commons';
 
 export enum Positions {
   CLOSED = 'closed',
@@ -53,7 +53,7 @@ const DAY_NAMES_PADDING = 24;
 const PAN_GESTURE_THRESHOLD = 30;
 const LEFT_ARROW = require('../calendar/img/previous.png');
 const RIGHT_ARROW = require('../calendar/img/next.png');
-const knobHitSlop = {left: 10, right: 10, top: 10, bottom: 10};
+const knobHitSlop = { left: 10, right: 10, top: 10, bottom: 10 };
 const DEFAULT_HEADER_HEIGHT = 78;
 
 export interface ExpandableCalendarProps extends CalendarListProps {
@@ -110,7 +110,7 @@ const headerStyleOverride = {
 
 const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarProps>((props, ref) => {
   const _context = useContext(Context);
-  const {date, setDate, numberOfDays, timelineLeftInset} = _context;
+  const { date, setDate, numberOfDays, timelineLeftInset } = _context;
 
   const {
     /** ExpandableCalendar props */
@@ -143,8 +143,8 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
 
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const onHeaderLayout = useCallback(({nativeEvent: {layout: {height}}}: LayoutChangeEvent) => {
-      setHeaderHeight(height || DEFAULT_HEADER_HEIGHT);
+  const onHeaderLayout = useCallback(({ nativeEvent: { layout: { height } } }: LayoutChangeEvent) => {
+    setHeaderHeight(height || DEFAULT_HEADER_HEIGHT);
   }, []);
 
   /** Date */
@@ -213,30 +213,30 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
 
   useEffect(() => {
     openHeight.current = getOpenHeight();
-  } ,[headerHeight]);
+  }, [headerHeight]);
 
 
   useEffect(() => {
     if (numberOfDays) {
-        setPosition(Positions.CLOSED);
+      setPosition(Positions.CLOSED);
     }
-}, [numberOfDays]);
+  }, [numberOfDays]);
 
   /** Components' refs */
 
-  const wrapper = useRef<any>();
-  const calendarList = useRef<any>();
-  const header = useRef<any>();
-  const weekCalendarWrapper = useRef<any>();
+  const wrapper = useRef<any>(null);
+  const calendarList = useRef<any>(null);
+  const header = useRef<any>(null);
+  const weekCalendarWrapper = useRef<any>(null);
 
   /** Styles */
 
   const style = useRef(styleConstructor(theme));
   const themeObject = Object.assign(headerStyleOverride, theme);
 
-  const _wrapperStyles = useRef({style: {height: startHeight}});
-  const _headerStyles = {style: {top: isOpen ? -headerHeight : 0}};
-  const _weekCalendarStyles = {style: {opacity: isOpen ? 0 : 1}};
+  const _wrapperStyles = useRef({ style: { height: startHeight } });
+  const _headerStyles = { style: { top: isOpen ? -headerHeight : 0 } };
+  const _weekCalendarStyles = { style: { opacity: isOpen ? 0 : 1 } };
 
   const shouldHideArrows = !horizontal ? true : hideArrows || false;
 
@@ -264,24 +264,24 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
   }, [calendarStyle]);
 
   const animatedHeaderStyle = useMemo(() => {
-    return [style.current.header, {height: headerHeight, top: headerDeltaY.current}];
+    return [style.current.header, { height: headerHeight, top: headerDeltaY.current }];
   }, [headerDeltaY.current, headerHeight]);
 
   const weekCalendarStyle = useMemo(() => {
-    return [style.current.weekContainer, isOpen ? style.current.hidden : style.current.visible, {top: headerHeight}];
+    return [style.current.weekContainer, isOpen ? style.current.hidden : style.current.visible, { top: headerHeight }];
   }, [isOpen, headerHeight]);
 
   const containerStyle = useMemo(() => {
-    return [allowShadow && style.current.containerShadow, propsStyle, headerHeight === 0  && style.current.hidden, {overflow: 'hidden'} as const];
+    return [allowShadow && style.current.containerShadow, propsStyle, headerHeight === 0 && style.current.hidden, { overflow: 'hidden' } as const];
   }, [allowShadow, propsStyle, headerHeight]);
 
   const wrapperStyle = useMemo(() => {
-    return {height: deltaY};
+    return { height: deltaY };
   }, [deltaY]);
 
   const numberOfDaysHeaderStyle = useMemo(() => {
     if (numberOfDays && numberOfDays > 1) {
-      return {paddingHorizontal: 0};
+      return { paddingHorizontal: 0 };
     }
   }, [numberOfDays]);
 
@@ -464,12 +464,12 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
 
   const _onPressArrowLeft = useCallback((method: () => void, month?: XDate) => {
     onPressArrowLeft?.(method, month);
-    scrollPage(false, isOpen ? UpdateSources.ARROW_PRESS: UpdateSources.WEEK_ARROW_PRESS);
+    scrollPage(false, isOpen ? UpdateSources.ARROW_PRESS : UpdateSources.WEEK_ARROW_PRESS);
   }, [onPressArrowLeft, scrollPage]);
 
   const _onPressArrowRight = useCallback((method: () => void, month?: XDate) => {
     onPressArrowRight?.(method, month);
-    scrollPage(true, isOpen ? UpdateSources.ARROW_PRESS: UpdateSources.WEEK_ARROW_PRESS);
+    scrollPage(true, isOpen ? UpdateSources.ARROW_PRESS : UpdateSources.WEEK_ARROW_PRESS);
   }, [onPressArrowRight, scrollPage]);
 
   const _onDayPress = useCallback((value: DateData) => {
@@ -515,7 +515,7 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
           }, 0);
         }
       }
-    }, 100, {trailing: true, leading: false}
+    }, 100, { trailing: true, leading: false }
   ), [date, scrollPage]);
 
   /** Renders */
@@ -565,7 +565,7 @@ const ExpandableCalendar = forwardRef<ExpandableCalendarRef, ExpandableCalendarP
   const renderKnob = () => {
     return (
       <View style={style.current.knobContainer} pointerEvents={'box-none'}>
-        <TouchableOpacity style={style.current.knob} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop}/>
+        <TouchableOpacity style={style.current.knob} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop} />
       </View>
     );
   };

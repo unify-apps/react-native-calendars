@@ -1,17 +1,18 @@
 import throttle from 'lodash/throttle';
 import flatten from 'lodash/flatten';
 import dropRight from 'lodash/dropRight';
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
-import {isToday, generateDay} from '../dateutils';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { isToday, generateDay } from '../dateutils';
 import InfiniteList from '../infinite-list';
 import Context from '../expandableCalendar/Context';
-import {UpdateSources} from '../expandableCalendar/commons';
-import Timeline, {TimelineProps} from '../timeline/Timeline';
-import useTimelinePages, {INITIAL_PAGE, NEAR_EDGE_THRESHOLD, PAGES_COUNT} from './useTimelinePages';
-import {ScrollViewProps} from 'react-native';
+import { UpdateSources } from '../expandableCalendar/commons';
+import Timeline, { TimelineProps } from '../timeline/Timeline';
+import useTimelinePages, { INITIAL_PAGE, NEAR_EDGE_THRESHOLD, PAGES_COUNT } from './useTimelinePages';
+import { ScrollViewProps } from 'react-native';
 import constants from '../commons/constants';
-import {HOUR_BLOCK_HEIGHT} from '../timeline/Packer';
-import {calcTimeOffset} from '../timeline/helpers/presenter';
+import { HOUR_BLOCK_HEIGHT } from '../timeline/Packer';
+import { calcTimeOffset } from '../timeline/helpers/presenter';
+import { JSX } from 'react';
 
 export interface TimelineListRenderItemInfo {
   item: string;
@@ -80,8 +81,8 @@ const TimelineList = (props: TimelineListProps) => {
     pageWidth
   } = props;
   const shouldFixRTL = useMemo(() => constants.isRTL && (constants.isRN73() || constants.isAndroid), []); // isHorizontal = true
-  const {date, updateSource, setDate, numberOfDays = 1, timelineLeftInset} = useContext(Context);
-  const listRef = useRef();
+  const { date, updateSource, setDate, numberOfDays = 1, timelineLeftInset } = useContext(Context);
+  const listRef = useRef(null);
   const prevDate = useRef(date);
   // store the initial offset if scrollToNow is true
   // so that we may not see content jump
@@ -90,8 +91,8 @@ const TimelineList = (props: TimelineListProps) => {
     const currentMinute = new Date().getMinutes();
     return scrollToNow ? calcTimeOffset(HOUR_BLOCK_HEIGHT, currentHour - 1, currentMinute) : undefined;
   });
-  const {pages, pagesRef, resetPages, resetPagesDebounce, scrollToPageDebounce, shouldResetPages, isOutOfRange} =
-    useTimelinePages({date, listRef, numberOfDays, shouldFixRTL});
+  const { pages, pagesRef, resetPages, resetPagesDebounce, scrollToPageDebounce, shouldResetPages, isOutOfRange } =
+    useTimelinePages({ date, listRef, numberOfDays, shouldFixRTL });
   const scrollToCurrentDate = useCallback(
     date => {
       const datePageIndex = pagesRef.current.indexOf(date);
@@ -181,7 +182,7 @@ const TimelineList = (props: TimelineListProps) => {
         isCurrentDay: isCurrent
       };
       if (renderItem) {
-        return renderItem(_timelineProps, {item, index, isCurrent, isInitialPage, isToday: _isToday});
+        return renderItem(_timelineProps, { item, index, isCurrent, isInitialPage, isToday: _isToday });
       }
       return (
         <>
@@ -218,7 +219,7 @@ const TimelineList = (props: TimelineListProps) => {
       onScroll={onScroll}
       pageWidth={pageWidth}
       pageHeight={pageHeight}
-      extendedState={{todayEvents: events[date], pages}}
+      extendedState={{ todayEvents: events[date], pages }}
       initialOffset={initialOffset}
       scrollViewProps={{
         onMomentumScrollEnd,

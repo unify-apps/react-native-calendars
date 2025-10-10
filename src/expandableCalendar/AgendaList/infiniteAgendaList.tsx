@@ -6,23 +6,23 @@ import InfiniteList from '../../infinite-list';
 
 import XDate from 'xdate';
 
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   DefaultSectionT,
   SectionListData
 } from 'react-native';
 
-import {useDidUpdate} from '../../hooks';
-import {getMoment} from '../../momentResolver';
-import {isGTE, isToday} from '../../dateutils';
-import {getDefaultLocale} from '../../services';
-import {UpdateSources, todayString} from '../commons';
+import { useDidUpdate } from '../../hooks';
+import { getMoment } from '../../momentResolver';
+import { isGTE, isToday } from '../../dateutils';
+import { getDefaultLocale } from '../../services';
+import { UpdateSources, todayString } from '../commons';
 import styleConstructor from '../style';
 import Context from '../Context';
 import constants from '../../commons/constants';
-import {parseDate} from '../../interface';
-import {LayoutProvider} from 'recyclerlistview/dist/reactnative/core/dependencies/LayoutProvider';
-import {AgendaSectionHeader, AgendaListProps} from './commons';
+import { parseDate } from '../../interface';
+import { LayoutProvider } from 'recyclerlistview/dist/reactnative/core/dependencies/LayoutProvider';
+import { AgendaSectionHeader, AgendaListProps } from './commons';
 
 /**
  * @description: AgendaList component that use InfiniteList to improve performance
@@ -48,10 +48,10 @@ const InfiniteAgendaList = ({
   onEndReachedThreshold,
   ...others
 }: Omit<AgendaListProps, 'viewOffset'>) => {
-  const {date, updateSource, setDate} = useContext(Context);
+  const { date, updateSource, setDate } = useContext(Context);
 
   const style = useRef(styleConstructor(theme));
-  const list = useRef<any>();
+  const list = useRef<any>(null);
   const _topSection = useRef(sections[0]?.title);
   const didScroll = useRef(false);
   const sectionScroll = useRef(false);
@@ -60,7 +60,7 @@ const InfiniteAgendaList = ({
 
   useEffect(() => {
     const items = sections.reduce((acc: any, cur: any) => {
-      return [...acc, {title: cur.title, isTitle: true}, ...cur.data];
+      return [...acc, { title: cur.title, isTitle: true }, ...cur.data];
     }, []);
     setData(items);
     dataRef.current = items;
@@ -145,7 +145,7 @@ const InfiniteAgendaList = ({
         _onMomentumScrollEnd(); // the RecyclerListView doesn't trigger onMomentumScrollEnd when calling scrollToSection
       }, 500);
     }
-  }, 1000, {leading: true, trailing: true}), [sections]);
+  }, 1000, { leading: true, trailing: true }), [sections]);
 
   const layoutProvider = useMemo(
     () => new LayoutProvider(
@@ -213,7 +213,7 @@ const InfiniteAgendaList = ({
 
   const headerTextStyle = useMemo(() => [style.current.sectionText, sectionStyle], [sectionStyle]);
 
-  const _renderSectionHeader = useCallback((info: {section: SectionListData<any, DefaultSectionT>}) => {
+  const _renderSectionHeader = useCallback((info: { section: SectionListData<any, DefaultSectionT> }) => {
     const title = info?.section?.title;
 
     if (renderSectionHeader) {
@@ -221,16 +221,16 @@ const InfiniteAgendaList = ({
     }
 
     const headerTitle = getSectionTitle(title);
-    return <AgendaSectionHeader title={headerTitle} style={headerTextStyle}/>;
+    return <AgendaSectionHeader title={headerTitle} style={headerTextStyle} />;
   }, [headerTextStyle]);
 
   const _renderItem = useCallback((_type: any, item: any) => {
     if (item?.isTitle) {
-      return _renderSectionHeader({section: item});
+      return _renderSectionHeader({ section: item });
     }
 
     if (renderItem) {
-      return renderItem({item} as any);
+      return renderItem({ item } as any);
     }
 
     return <></>;
@@ -238,7 +238,7 @@ const InfiniteAgendaList = ({
 
   const _onEndReached = useCallback(() => {
     if (onEndReached) {
-      onEndReached({distanceFromEnd: 0}); // The RecyclerListView doesn't provide the distanceFromEnd, so we just pass 0
+      onEndReached({ distanceFromEnd: 0 }); // The RecyclerListView doesn't provide the distanceFromEnd, so we just pass 0
     }
   }, [onEndReached]);
 
@@ -251,7 +251,7 @@ const InfiniteAgendaList = ({
       layoutProvider={layoutProvider}
       onScroll={_onScroll}
       onVisibleIndicesChanged={_onVisibleIndicesChanged}
-      scrollViewProps={{nestedScrollEnabled: true, ...others, onMomentumScrollEnd: _onMomentumScrollEnd}}
+      scrollViewProps={{ nestedScrollEnabled: true, ...others, onMomentumScrollEnd: _onMomentumScrollEnd }}
       onEndReached={_onEndReached}
       onEndReachedThreshold={onEndReachedThreshold as number | undefined}
       disableScrollOnDataChange

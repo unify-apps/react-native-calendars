@@ -1,6 +1,7 @@
 import XDate from 'xdate';
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { View, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import { JSX } from 'react';
 
 export interface Event {
   id?: string;

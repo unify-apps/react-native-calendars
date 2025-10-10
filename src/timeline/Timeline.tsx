@@ -17,6 +17,7 @@ import useTimelineOffset from './useTimelineOffset';
 import isNil from 'lodash/isNil';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { createEventSegments } from './utils';
+import { JSX } from 'react';
 
 export interface TimelineProps {
   /**
@@ -510,4 +511,4 @@ const Timeline = (props: TimelineProps) => {
 };
 export default React.memo(Timeline);
 
-export { Event as TimelineEventProps, PackedEvent as TimelinePackedEventProps };
+export type { Event as TimelineEventProps, PackedEvent as TimelinePackedEventProps };

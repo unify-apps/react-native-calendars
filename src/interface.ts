@@ -1,4 +1,5 @@
-const XDate = require('xdate');
+import XDate from 'xdate';
+import type {default as XDateType} from 'xdate';
 
 export function padNumber(n: number) {
   if (n < 10) {
@@ -7,7 +8,7 @@ export function padNumber(n: number) {
   return n;
 }
 
-export function xdateToData(date: XDate | string) {
+export function xdateToData(date: XDateType | string) {
   const d = date instanceof XDate ? date : new XDate(date);
   const dateString = toMarkingFormat(d);
   return {

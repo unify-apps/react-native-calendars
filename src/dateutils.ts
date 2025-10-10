@@ -1,6 +1,8 @@
-const XDate = require('xdate');
-const {toMarkingFormat} = require('./interface');
+import XDate from 'xdate';
+import {toMarkingFormat} from './interface';
+
 const latinNumbersPattern = /[0-9]/g;
+
 function isValidXDate(date: unknown) {
   return date && date instanceof XDate;
 }
@@ -17,7 +19,6 @@ export function isPreviousMonth(nextDate?: XDate, currentDate?: XDate) {
   }
 
   return (
-    // @ts-expect-error -- safety check is done. ts is dumb here
     (nextDate?.getFullYear() - currentDate?.getFullYear()) * 12 + nextDate?.getMonth() - currentDate?.getMonth() === -1
   );
 }

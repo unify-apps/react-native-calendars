@@ -1,11 +1,11 @@
 import inRange from 'lodash/inRange';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
-import React, {forwardRef, useCallback, useEffect, useMemo, useRef} from 'react';
-import {ScrollViewProps} from 'react-native';
-import {DataProvider, LayoutProvider, RecyclerListView, RecyclerListViewProps} from 'recyclerlistview';
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react';
+import { ScrollViewProps } from 'react-native';
+import { DataProvider, LayoutProvider, RecyclerListView, RecyclerListViewProps } from 'recyclerlistview';
 import constants from '../commons/constants';
-import {useCombinedRefs} from '../hooks';
+import { useCombinedRefs } from '../hooks';
 
 const dataProviderMaker = (items: string[]) => new DataProvider((item1, item2) => item1 !== item2).cloneWithRows(items);
 
@@ -15,7 +15,7 @@ export interface InfiniteListProps
   renderItem: RecyclerListViewProps['rowRenderer'];
   pageWidth?: number;
   pageHeight?: number;
-  onPageChange?: (pageIndex: number, prevPageIndex: number, info: {scrolledByUser: boolean}) => void;
+  onPageChange?: (pageIndex: number, prevPageIndex: number, info: { scrolledByUser: boolean }) => void;
   onReachEdge?: (pageIndex: number) => void;
   onReachNearEdge?: (pageIndex: number) => void;
   onReachNearEdgeThreshold?: number;
@@ -68,17 +68,17 @@ const InfiniteList = (props: InfiniteListProps, ref: any) => {
       }
     )
   );
-  
+
   const shouldFixRTL = useMemo(() => {
     return isHorizontal && constants.isRTL && (constants.isRN73() || constants.isAndroid);
   }, [isHorizontal]);
 
   const listRef = useCombinedRefs(ref);
-  const pageIndex = useRef<number>();
+  const pageIndex = useRef<number>(0);
   const isOnEdge = useRef(false);
   const isNearEdge = useRef(false);
   const scrolledByUser = useRef(false);
-  const reloadPagesDebounce = useCallback(debounce(reloadPages, 500, {leading: false, trailing: true}), [reloadPages]);
+  const reloadPagesDebounce = useCallback(debounce(reloadPages, 500, { leading: false, trailing: true }), [reloadPages]);
 
   useEffect(() => {
     if (disableScrollOnDataChange) {
@@ -103,7 +103,7 @@ const InfiniteList = (props: InfiniteListProps, ref: any) => {
       const newPageIndex = Math.round(isHorizontal ? x / pageWidth : y / pageHeight);
       if (pageIndex.current !== newPageIndex) {
         if (pageIndex.current !== undefined) {
-          onPageChange?.(newPageIndex, pageIndex.current, {scrolledByUser: scrolledByUser.current});
+          onPageChange?.(newPageIndex, pageIndex.current, { scrolledByUser: scrolledByUser.current });
           scrolledByUser.current = false;
 
           isOnEdge.current = false;
@@ -166,12 +166,11 @@ const InfiniteList = (props: InfiniteListProps, ref: any) => {
   }, [onScrollBeginDrag, onMomentumScrollEnd, scrollViewProps, isHorizontal]);
 
   const style = useMemo(() => {
-    return {height: pageHeight};
+    return { height: pageHeight };
   }, [pageHeight]);
 
   return (
     <RecyclerListView
-      // @ts-expect-error
       ref={listRef}
       isHorizontal={isHorizontal}
       rowRenderer={renderItem}

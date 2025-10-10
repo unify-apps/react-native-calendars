@@ -1,16 +1,17 @@
 import isFunction from 'lodash/isFunction';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
+import { JSX } from 'react';
 
-import React, {Component} from 'react';
-import {ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent} from 'react-native';
+import React, { Component } from 'react';
+import { ActivityIndicator, View, FlatList, StyleProp, ViewStyle, TextStyle, NativeSyntheticEvent, NativeScrollEvent, LayoutChangeEvent } from 'react-native';
 
-import {extractReservationProps} from '../../componentUpdater';
-import {sameDate} from '../../dateutils';
-import {toMarkingFormat} from '../../interface';
+import { extractReservationProps } from '../../componentUpdater';
+import { sameDate } from '../../dateutils';
+import { toMarkingFormat } from '../../interface';
 import styleConstructor from './style';
-import Reservation, {ReservationProps} from './reservation';
-import {AgendaEntry, AgendaSchedule, DayAgenda} from '../../types';
+import Reservation, { ReservationProps } from './reservation';
+import { AgendaEntry, AgendaSchedule, DayAgenda } from '../../types';
 
 
 export type ReservationListProps = ReservationProps & {
@@ -61,7 +62,7 @@ class ReservationList extends Component<ReservationListProps, State> {
     selectedDay: PropTypes.instanceOf(XDate),
     topDay: PropTypes.instanceOf(XDate),
     onDayChange: PropTypes.func,
-    
+
     showOnlySelectedDayItems: PropTypes.bool,
     renderEmptyData: PropTypes.func,
 
@@ -75,17 +76,17 @@ class ReservationList extends Component<ReservationListProps, State> {
     onRefresh: PropTypes.func,
     reservationsKeyExtractor: PropTypes.func
   };
-  
+
   static defaultProps = {
     refreshing: false,
     selectedDay: new XDate(true)
   };
 
-  private style: {[key: string]: ViewStyle | TextStyle};
+  private style: { [key: string]: ViewStyle | TextStyle };
   private heights: number[];
   private selectedDay?: XDate;
   private scrollOver: boolean;
-  private list: React.RefObject<FlatList> = React.createRef();
+  private list: React.RefObject<FlatList | null> = React.createRef();
 
 
   constructor(props: ReservationListProps) {
@@ -109,7 +110,7 @@ class ReservationList extends Component<ReservationListProps, State> {
   componentDidUpdate(prevProps: ReservationListProps) {
     if (this.props.topDay && prevProps.topDay && prevProps !== this.props) {
       if (!sameDate(prevProps.topDay, this.props.topDay)) {
-        this.setState({reservations: []},
+        this.setState({ reservations: [] },
           () => this.updateReservations(this.props)
         );
       } else {
@@ -119,20 +120,20 @@ class ReservationList extends Component<ReservationListProps, State> {
   }
 
   updateDataSource(reservations: DayAgenda[]) {
-    this.setState({reservations});
+    this.setState({ reservations });
   }
 
   updateReservations(props: ReservationListProps) {
-    const {selectedDay, showOnlySelectedDayItems} = props;
+    const { selectedDay, showOnlySelectedDayItems } = props;
     const reservations = this.getReservations(props);
-    
+
     if (!showOnlySelectedDayItems && this.list && !sameDate(selectedDay, this.selectedDay)) {
       let scrollPosition = 0;
       for (let i = 0; i < reservations.scrollPosition; i++) {
         scrollPosition += this.heights[i] || 0;
       }
       this.scrollOver = false;
-      this.list?.current?.scrollToOffset({offset: scrollPosition, animated: true});
+      this.list?.current?.scrollToOffset({ offset: scrollPosition, animated: true });
     }
 
     this.selectedDay = selectedDay;
@@ -142,7 +143,7 @@ class ReservationList extends Component<ReservationListProps, State> {
   getReservationsForDay(iterator: XDate, props: ReservationListProps) {
     const day = iterator.clone();
     const res = props.items?.[toMarkingFormat(day)];
-    
+
     if (res && res.length) {
       return res.map((reservation: AgendaEntry, i: number) => {
         return {
@@ -162,10 +163,10 @@ class ReservationList extends Component<ReservationListProps, State> {
   }
 
   getReservations(props: ReservationListProps) {
-    const {selectedDay, showOnlySelectedDayItems} = props;
-    
+    const { selectedDay, showOnlySelectedDayItems } = props;
+
     if (!props.items || !selectedDay) {
-      return {reservations: [], scrollPosition: 0};
+      return { reservations: [], scrollPosition: 0 };
     }
 
     let reservations: DayAgenda[] = [];
@@ -205,7 +206,7 @@ class ReservationList extends Component<ReservationListProps, State> {
       }
     }
 
-    return {reservations, scrollPosition};
+    return { reservations, scrollPosition };
   }
 
   onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -246,12 +247,12 @@ class ReservationList extends Component<ReservationListProps, State> {
     return false;
   };
 
-  renderRow = ({item, index}: {item: DayAgenda; index: number}) => {
+  renderRow = ({ item, index }: { item: DayAgenda; index: number }) => {
     const reservationProps = extractReservationProps(this.props);
 
     return (
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
-        <Reservation {...reservationProps} item={item.reservation} date={item.date}/>
+        <Reservation {...reservationProps} item={item.reservation} date={item.date} />
       </View>
     );
   };
@@ -261,13 +262,13 @@ class ReservationList extends Component<ReservationListProps, State> {
   };
 
   render() {
-    const {items, selectedDay, theme, style} = this.props;
-    
+    const { items, selectedDay, theme, style } = this.props;
+
     if (!items || selectedDay && !items[toMarkingFormat(selectedDay)]) {
       if (isFunction(this.props.renderEmptyData)) {
         return this.props.renderEmptyData?.();
       }
-      return <ActivityIndicator style={this.style.indicator} color={theme?.indicatorColor}/>;
+      return <ActivityIndicator style={this.style.indicator} color={theme?.indicatorColor} />;
     }
 
     return (
