@@ -1,19 +1,19 @@
-import React, {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
-import {View} from 'react-native';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
 import XDate from 'xdate';
 
 import InfiniteList from '../../infinite-list';
 import Week from '../week';
 import WeekDaysNames from '../../commons/WeekDaysNames';
-import {CalendarListProps} from '../../calendar-list';
+import { CalendarListProps } from '../../calendar-list';
 import CalendarContext from '../../expandableCalendar/Context';
 import styleConstructor from '../style';
-import {toMarkingFormat} from '../../interface';
-import {extractCalendarProps} from '../../componentUpdater';
+import { toMarkingFormat } from '../../interface';
+import { extractCalendarProps } from '../../componentUpdater';
 import constants from '../../commons/constants';
-import {UpdateSources} from '../commons';
-import {sameWeek} from '../../dateutils';
-import {DateData} from '../../types';
+import { UpdateSources } from '../commons';
+import { sameWeek } from '../../dateutils';
+import { DateData } from '../../types';
 
 export interface WeekCalendarProps extends CalendarListProps {
   /** whether to have shadow/elevation for the calendar */
@@ -24,11 +24,11 @@ const NUMBER_OF_PAGES = 50;
 const DEFAULT_PAGE_HEIGHT = 48;
 
 const WeekCalendar = (props: WeekCalendarProps) => {
-  const {current, firstDay = 0, markedDates, allowShadow = true, hideDayNames, theme, calendarWidth, calendarHeight = DEFAULT_PAGE_HEIGHT, testID} = props;
+  const { current, firstDay = 0, markedDates, allowShadow = true, hideDayNames, theme, calendarWidth, calendarHeight = DEFAULT_PAGE_HEIGHT, testID } = props;
   const context = useContext(CalendarContext);
-  const {date, updateSource} = context;
+  const { date, updateSource } = context;
   const style = useRef(styleConstructor(theme));
-  const list = useRef();
+  const list = useRef(null);
   const [items, setItems] = useState(getDatesArray(current || date, firstDay, NUMBER_OF_PAGES));
 
   const extraData = {
@@ -39,7 +39,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
 
   const containerWidth = calendarWidth || constants.screenWidth;
   const weekStyle = useMemo(() => {
-    return [{width: containerWidth}, props.style];
+    return [{ width: containerWidth }, props.style];
   }, [containerWidth, props.style]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
   );
 
   const onPageChange = useCallback(
-    (pageIndex: number, _prevPage, {scrolledByUser}) => {
+    (pageIndex: number, _prevPage, { scrolledByUser }) => {
       if (scrolledByUser) {
         context?.setDate(items[pageIndex], UpdateSources.WEEK_SCROLL);
       }
@@ -77,8 +77,8 @@ const WeekCalendar = (props: WeekCalendarProps) => {
 
   const renderItem = useCallback(
     (_type: any, item: string) => {
-      const {allowShadow, ...calendarListProps} = props;
-      const {/* style,  */ ...others} = extractCalendarProps(calendarListProps);
+      const { allowShadow, ...calendarListProps } = props;
+      const {/* style,  */ ...others } = extractCalendarProps(calendarListProps);
 
       const isSameWeek = sameWeek(item, date, firstDay);
 
@@ -105,7 +105,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
     >
       {!hideDayNames && (
         <View style={[style.current.week, style.current.weekCalendar]}>
-          <WeekDaysNames firstDay={firstDay} style={style.current.dayHeader}/>
+          <WeekDaysNames firstDay={firstDay} style={style.current.dayHeader} />
         </View>
       )}
       <View>

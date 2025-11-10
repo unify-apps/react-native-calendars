@@ -1,17 +1,17 @@
 import findIndex from 'lodash/findIndex';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
-import {AccessibilityInfo, FlatList, FlatListProps, View, ViewStyle} from 'react-native';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { AccessibilityInfo, FlatList, FlatListProps, View, ViewStyle } from 'react-native';
 
-import {extractCalendarProps, extractHeaderProps} from '../componentUpdater';
-import {parseDate, toMarkingFormat, xdateToData} from '../interface';
-import {page, sameDate, sameMonth} from '../dateutils';
+import { extractCalendarProps, extractHeaderProps } from '../componentUpdater';
+import { parseDate, toMarkingFormat, xdateToData } from '../interface';
+import { page, sameDate, sameMonth } from '../dateutils';
 import constants from '../commons/constants';
-import {useDidUpdate} from '../hooks';
-import {ContextProp} from '../types';
+import { useDidUpdate } from '../hooks';
+import { ContextProp } from '../types';
 import styleConstructor from './style';
-import Calendar, {CalendarProps} from '../calendar';
+import Calendar, { CalendarProps } from '../calendar';
 import CalendarListItem from './item';
 import CalendarHeader from '../calendar/header/index';
 import isEqual from 'lodash/isEqual';
@@ -121,7 +121,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   const shouldMeasureHeader = useRef(true);
 
   const style = useRef(styleConstructor(theme));
-  const list = useRef<any>();
+  const list = useRef<any>(null);
   const range = useRef(horizontal ? 1 : 3);
   const initialDate = useRef(parseDate(current) || new XDate());
   const visibleMonth = useRef(currentMonth);
@@ -144,13 +144,13 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
   }, [propsStyle]);
 
   const initialDateIndex = useMemo(() => {
-    return findIndex(items, function(item) {
+    return findIndex(items, function (item) {
       return item.toString() === initialDate.current?.toString();
     });
   }, [items]);
 
   const getDateIndex = useCallback((date: string) => {
-    return findIndex(items, function(item) {
+    return findIndex(items, function (item) {
       return item.toString() === date.toString();
     });
   }, [items]);
@@ -189,7 +189,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     }
 
     if (scrollAmount !== 0) {
-      list?.current?.scrollToOffset({offset: scrollAmount, animated});
+      list?.current?.scrollToOffset({ offset: scrollAmount, animated });
     }
   };
 
@@ -199,7 +199,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     const scrollAmount = calendarSize * (shouldFixRTL ? pastScrollRange - diffMonths : pastScrollRange + diffMonths);
 
     if (scrollAmount !== 0) {
-      list?.current?.scrollToOffset({offset: scrollAmount, animated: animateScroll});
+      list?.current?.scrollToOffset({ offset: scrollAmount, animated: animateScroll });
     }
   }, [calendarSize, shouldFixRTL, pastScrollRange, animateScroll]);
 
@@ -240,7 +240,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     return false;
   }, [currentMonth]);
 
-  const renderItem = useCallback(({item}: {item: XDate}) => {
+  const renderItem = useCallback(({ item }: { item: XDate }) => {
     const dateString = toMarkingFormat(item);
     const [year, month] = dateString.split('-');
     const testId = `${testID}.item_${year}-${month}`;
@@ -289,7 +289,7 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
     viewAreaCoveragePercentThreshold: 20
   });
 
-  const onViewableItemsChanged = useCallback(({viewableItems}: any) => {
+  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
     const newVisibleMonth = parseDate(viewableItems[0]?.item);
     if (shouldFixRTL) {
       const centerIndex = items.findIndex((item) => isEqual(parseDate(current), item));

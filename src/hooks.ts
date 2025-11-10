@@ -16,7 +16,7 @@ export const useDidUpdate = (callback: () => void, dep: DependencyList) => {
 };
 
 export const useCombinedRefs = (...refs: React.Ref<any>[]) => {
-  const targetRef = React.useRef();
+  const targetRef = React.useRef(null);
 
   React.useEffect(() => {
     refs.forEach(ref => {
@@ -27,7 +27,6 @@ export const useCombinedRefs = (...refs: React.Ref<any>[]) => {
       if (typeof ref === 'function') {
         ref(targetRef.current);
       } else {
-        // @ts-expect-error
         ref.current = targetRef.current;
       }
     });

@@ -1,24 +1,24 @@
 import XDate from 'xdate';
-import React, {useRef, useMemo, useCallback} from 'react';
-import {View} from 'react-native';
+import React, { useRef, useMemo, useCallback } from 'react';
+import { View } from 'react-native';
 import isEqual from 'lodash/isEqual';
-
-import {getPartialWeekDates, getWeekDates, sameMonth} from '../dateutils';
-import {parseDate, toMarkingFormat} from '../interface';
-import {getState} from '../day-state-manager';
-import {extractDayProps} from '../componentUpdater';
+import { JSX } from 'react';
+import { getPartialWeekDates, getWeekDates, sameMonth } from '../dateutils';
+import { parseDate, toMarkingFormat } from '../interface';
+import { getState } from '../day-state-manager';
+import { extractDayProps } from '../componentUpdater';
 import styleConstructor from './style';
-import {CalendarProps} from '../calendar';
+import { CalendarProps } from '../calendar';
 import Day from '../calendar/day/index';
-import {CalendarContextProps} from './Context';
+import { CalendarContextProps } from './Context';
 
 export type WeekProps = CalendarProps & {
   context?: CalendarContextProps;
 };
 
 function arePropsEqual(prevProps: WeekProps, nextProps: WeekProps) {
-  const {context: prevContext, markedDates: prevMarkings, ...prevOthers} = prevProps;
-  const {context: nextContext, markedDates: nextMarkings, ...nextOthers} = nextProps;
+  const { context: prevContext, markedDates: prevMarkings, ...prevOthers } = prevProps;
+  const { context: nextContext, markedDates: nextMarkings, ...nextOthers } = nextProps;
 
   return isEqual(prevContext, nextContext) && isEqual(prevMarkings, nextMarkings) && isEqual(prevOthers, nextOthers);
 }
@@ -50,7 +50,7 @@ const Week = React.memo((props: WeekProps) => {
   }, [firstDay]);
 
   const partialWeekStyle = useMemo(() => {
-    return [style.current.partialWeek, {paddingLeft: timelineLeftInset}];
+    return [style.current.partialWeek, { paddingLeft: timelineLeftInset }];
   }, [timelineLeftInset]);
 
   const dayProps = extractDayProps(props);
@@ -60,7 +60,7 @@ const Week = React.memo((props: WeekProps) => {
     // hide extra days
     if (current && hideExtraDays) {
       if (!sameMonth(day, currXdate)) {
-        return <View key={id} style={style.current.emptyDayContainer}/>;
+        return <View key={id} style={style.current.emptyDayContainer} />;
       }
     }
     const dayString = toMarkingFormat(day);
@@ -72,7 +72,7 @@ const Week = React.memo((props: WeekProps) => {
           testID={`${testID}.day_${dayString}`}
           date={dayString}
           state={getState(day, currXdate, props, disableDaySelection)}
-          marking={disableDaySelection ? {...markedDates?.[dayString], disableTouchEvent: true} : markedDates?.[dayString]}
+          marking={disableDaySelection ? { ...markedDates?.[dayString], disableTouchEvent: true } : markedDates?.[dayString]}
           onPress={onDayPress}
           onLongPress={onDayLongPress}
         />

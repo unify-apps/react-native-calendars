@@ -1,6 +1,7 @@
-import { ViewStyle, TextStyle } from 'react-native';
-import { MarkingProps } from './calendar/day/marking';
-import { CalendarContextProps } from './expandableCalendar/Context';
+import {ViewStyle, TextStyle} from 'react-native';
+import {MarkingProps} from './calendar/day/marking';
+import {CalendarContextProps} from './expandableCalendar/Context';
+import type XDate from 'xdate';
 
 export type ContextProp = {
   context?: CalendarContextProps;

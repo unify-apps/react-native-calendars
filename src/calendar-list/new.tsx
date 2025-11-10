@@ -1,10 +1,10 @@
 import XDate from 'xdate';
-import React, {useCallback, useEffect, useRef, useState, useMemo} from 'react';
-import {View, ScrollViewProps, ScrollView} from 'react-native';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import { View, ScrollViewProps, ScrollView } from 'react-native';
 import constants from '../commons/constants';
-import {toMarkingFormat} from '../interface';
-import {extractHeaderProps} from '../componentUpdater';
-import Calendar, {CalendarProps} from '../calendar';
+import { toMarkingFormat } from '../interface';
+import { extractHeaderProps } from '../componentUpdater';
+import Calendar, { CalendarProps } from '../calendar';
 import CalendarHeader from '../calendar/header';
 import InfiniteList from '../infinite-list';
 import styleConstructor from './style';
@@ -32,15 +32,15 @@ const CALENDAR_HEIGHT = 360;
 const CalendarList = (props: CalendarListProps) => {
   const {
     initialDate,
-    horizontal, 
+    horizontal,
     scrollRange = NUMBER_OF_PAGES,
-    staticHeader, 
+    staticHeader,
     scrollViewProps,
     calendarProps,
     testID
   } = props;
   const style = useRef(styleConstructor(calendarProps?.theme));
-  const list = useRef<ScrollView>();
+  const list = useRef<ScrollView | null>(null);
   const [items, setItems] = useState<string[]>(getDatesArray(initialDate, scrollRange));
   const [positionIndex, setPositionIndex] = useState(scrollRange);
 
@@ -102,7 +102,7 @@ const CalendarList = (props: CalendarListProps) => {
     }
   }, [updateMonth]);
 
-  const onPageChange = useCallback((pageIndex: number, _: number, info: {scrolledByUser: boolean}) => {
+  const onPageChange = useCallback((pageIndex: number, _: number, info: { scrolledByUser: boolean }) => {
     if (shouldRenderStaticHeader && info.scrolledByUser) {
       setCurrentMonth(items[pageIndex]);
     }
@@ -143,7 +143,7 @@ const CalendarList = (props: CalendarListProps) => {
     const array: string[] = [...items];
     const startingDate = items[index];
     const shouldAppend = index > scrollRange;
-    
+
     if (startingDate) {
       if (shouldAppend) {
         for (let i = 2; i <= scrollRange; i++) {
@@ -165,7 +165,7 @@ const CalendarList = (props: CalendarListProps) => {
   /** List */
 
   const listContainerStyle = useMemo(() => {
-    return [style.current.flatListContainer, {flex: horizontal ? undefined : 1}];
+    return [style.current.flatListContainer, { flex: horizontal ? undefined : 1 }];
   }, [style, horizontal]);
 
   const scrollProps = useMemo(() => {
@@ -185,12 +185,12 @@ const CalendarList = (props: CalendarListProps) => {
         disableMonthChange
         hideArrows={!horizontal}
         onPressArrowRight={scrollToNextMonth}
-        onPressArrowLeft={scrollToPreviousMonth} 
+        onPressArrowLeft={scrollToPreviousMonth}
         hideExtraDays={calendarProps?.hideExtraDays || true}
         style={[style.current.calendar, calendarProps?.style]}
         headerStyle={horizontal ? calendarProps?.headerStyle : undefined}
         testID={`${testID}_${item}`}
-        // context={context}
+      // context={context}
       />
     );
   }, [calendarProps, scrollToNextMonth, scrollToPreviousMonth]);
@@ -224,10 +224,10 @@ export default CalendarList;
 function getDate(date: string, index: number) {
   const d = new XDate(date);
   d.addMonths(index, true);
-  
+
   // if (index !== 0) {
-    d.setDate(1);
-    // }
+  d.setDate(1);
+  // }
   return toMarkingFormat(d);
 }
 

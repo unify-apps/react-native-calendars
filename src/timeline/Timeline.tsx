@@ -2,21 +2,23 @@ import min from 'lodash/min';
 import map from 'lodash/map';
 import times from 'lodash/times';
 import groupBy from 'lodash/groupBy';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, ScrollView} from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { View, ScrollView } from 'react-native';
 import constants from '../commons/constants';
-import {generateDay} from '../dateutils';
-import {Theme} from '../types';
+import { generateDay } from '../dateutils';
+import { Theme } from '../types';
 import styleConstructor from './style';
-import {populateEvents, HOUR_BLOCK_HEIGHT, UnavailableHours} from './Packer';
-import {calcTimeOffset} from './helpers/presenter';
-import TimelineHours, {TimelineHoursProps} from './TimelineHours';
-import EventBlock, {Event, PackedEvent} from './EventBlock';
+import { populateEvents, HOUR_BLOCK_HEIGHT, UnavailableHours } from './Packer';
+import { calcTimeOffset } from './helpers/presenter';
+import TimelineHours, { TimelineHoursProps } from './TimelineHours';
+import EventBlock, { Event, PackedEvent } from './EventBlock';
 import NowIndicator from './NowIndicator';
 import useTimelineOffset from './useTimelineOffset';
 import isNil from 'lodash/isNil';
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {createEventSegments} from './utils';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { createEventSegments } from './utils';
+import { JSX } from 'react';
+
 export interface TimelineProps {
   /**
    * The date / dates of this timeline instance in ISO format (e.g. 2011-10-25)
@@ -158,19 +160,19 @@ const AllDayEvents = ({
 
   return (
     <View
-      style={[s.container, {borderColor: styles.line?.backgroundColor}, styles.container, {height: containerHeight}]}
+      style={[s.container, { borderColor: styles.line?.backgroundColor }, styles.container, { height: containerHeight }]}
     >
-      <View style={[s.labelBox, {width: timelineLeftInset - 16}]}>
+      <View style={[s.labelBox, { width: timelineLeftInset - 16 }]}>
         <Text style={styles.allDayLabelText}>All-day</Text>
       </View>
 
-      <View style={[s.daysArea, {width: constants.screenWidth - (timelineLeftInset - 16)}]}>
+      <View style={[s.daysArea, { width: constants.screenWidth - (timelineLeftInset - 16) }]}>
         {times(numberOfDays, index => (
           <View
             key={`sep-${index}`}
             style={[
               styles.verticalLine,
-              {right: (index + 1) * colWidth} // same math as TimelineHours
+              { right: (index + 1) * colWidth } // same math as TimelineHours
             ]}
           />
         ))}
@@ -301,21 +303,11 @@ const s = StyleSheet.create({
 });
 
 // helper to detect all-day
-const isAllDayEvent = e => {
-  if (e.allDay || e.isAllDay) return true;
-
-  const startDate = new Date(e.start || e.startDate || e.startTime || e.start_at);
-  const endDate = new Date(e.end || e.endDate || e.endTime || e.end_at);
-  if (isNaN(+startDate) || isNaN(+endDate)) return false;
-
-  const startIsMidnight = startDate.getHours() === 0 && startDate.getMinutes() === 0;
-  const endIsMidnight = endDate.getHours() === 0 && endDate.getMinutes() === 0;
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  return startIsMidnight && endIsMidnight && endDate.getTime() - startDate.getTime() >= oneDay;
+const isAllDayEvent = (e: Event | PackedEvent) => {
+  return e.allDay || (e as { originalEvent?: Event }).originalEvent?.allDay;
 };
 
-const Timeline = props => {
+const Timeline = (props: TimelineProps) => {
   const {
     format24h = true,
     start = 0,
@@ -366,21 +358,23 @@ const Timeline = props => {
   const pageEvents = useMemo(() => {
     return map(pageDates, d => groupedEvents[d] || []);
   }, [pageDates, groupedEvents]);
-  const scrollView = useRef();
+
+  const scrollView = useRef<ScrollView | undefined>(undefined);
   const calendarHeight = useMemo(() => (end - start) * HOUR_BLOCK_HEIGHT, [end, start]);
   const styles = useMemo(
     () => styleConstructor(theme || props.styles, calendarHeight),
     [theme, props.styles, calendarHeight]
   );
-  const {scrollEvents} = useTimelineOffset({onChangeOffset, scrollOffset, scrollViewRef: scrollView, isCurrentDay});
+
+  const { scrollEvents } = useTimelineOffset({ onChangeOffset, scrollOffset, scrollViewRef: scrollView, isCurrentDay });
   const width = useMemo(() => {
     return constants.screenWidth - timelineLeftInset;
   }, [timelineLeftInset]);
 
-  const {allDayByDay, timedByDay} = useMemo(() => {
+  const { allDayByDay, timedByDay } = useMemo(() => {
     const allDay = pageEvents.map(list => list.filter(isAllDayEvent));
     const timed = pageEvents.map(list => list.filter(e => !isAllDayEvent(e)));
-    return {allDayByDay: allDay, timedByDay: timed};
+    return { allDayByDay: allDay, timedByDay: timed };
   }, [pageEvents]);
 
   // process events for positioning and overlap handling
@@ -422,9 +416,9 @@ const Timeline = props => {
   }, []);
 
   const _onEventPress = useCallback(
-    event => {
+    (event: Event | PackedEvent) => {
       // if event is a segment, use the original event
-      const eventToPass = event?.originalEvent || event;
+      const eventToPass = (event as { originalEvent?: Event }).originalEvent || event;
       if (eventTapped) {
         //TODO: remove after deprecation
         eventTapped(eventToPass);
@@ -436,8 +430,8 @@ const Timeline = props => {
   );
 
   // render events for a specific day
-  const renderEvents = dayIndex => {
-    const events = packedEvents[dayIndex].map((event, eventIndex) => {
+  const renderEvents = (dayIndex: number) => {
+    const events = packedEvents[dayIndex].map((event: PackedEvent, eventIndex: number) => {
       const onEventPress = () => _onEventPress(event);
       return (
         <EventBlock
@@ -455,27 +449,27 @@ const Timeline = props => {
     return (
       <View
         pointerEvents={'box-none'}
-        style={[{marginLeft: dayIndex === 0 ? timelineLeftInset : undefined}, styles.eventsContainer]}
+        style={[{ marginLeft: dayIndex === 0 ? timelineLeftInset : undefined }, styles.eventsContainer]}
       >
         {events}
       </View>
     );
   };
-  const renderTimelineDay = dayIndex => {
+  const renderTimelineDay = (dayIndex: number) => {
     const indexOfToday = pageDates.indexOf(generateDay(new Date().toString()));
     const left = timelineLeftInset + (indexOfToday * width) / numberOfDays;
     return (
       <React.Fragment key={dayIndex}>
         {renderEvents(dayIndex)}
         {indexOfToday !== -1 && showNowIndicator && (
-          <NowIndicator width={width / numberOfDays} left={left} styles={styles}/>
+          <NowIndicator width={width / numberOfDays} left={left} styles={styles} />
         )}
       </React.Fragment>
     );
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <AllDayEvents
         numberOfDays={numberOfDays}
         width={width}
@@ -487,9 +481,10 @@ const Timeline = props => {
       />
 
       <ScrollView
+        // @ts-expect-error -- type is correct.
         ref={scrollView}
         style={styles.container}
-        contentContainerStyle={[styles.contentStyle, {width: constants.screenWidth}]}
+        contentContainerStyle={[styles.contentStyle, { width: constants.screenWidth }]}
         showsVerticalScrollIndicator={false}
         {...scrollEvents}
         testID={testID}
@@ -515,3 +510,5 @@ const Timeline = props => {
   );
 };
 export default React.memo(Timeline);
+
+export type { Event as TimelineEventProps, PackedEvent as TimelinePackedEventProps };
