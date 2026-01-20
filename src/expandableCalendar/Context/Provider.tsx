@@ -1,17 +1,17 @@
-import {includes} from 'lodash';
+import { includes } from 'lodash';
 import XDate from 'xdate';
 
-import React, {useRef, useState, useCallback, useMemo} from 'react';
-import {View, ViewStyle, ViewProps, StyleProp} from 'react-native';
+import React, { useRef, useState, useCallback, useMemo } from 'react';
+import { View, ViewStyle, ViewProps, StyleProp } from 'react-native';
 
-import {sameMonth} from '../../dateutils';
-import {xdateToData} from '../../interface';
-import {useDidUpdate} from '../../hooks';
-import {Theme, DateData} from '../../types';
-import {UpdateSources, CalendarNavigationTypes} from '../commons';
+import { sameMonth } from '../../dateutils';
+import { xdateToData } from '../../interface';
+import { useDidUpdate } from '../../hooks';
+import { Theme, DateData } from '../../types';
+import { UpdateSources, CalendarNavigationTypes } from '../commons';
 import styleConstructor from '../style';
 import CalendarContext from './index';
-import TodayButton, {TodayButtonImperativeMethods} from './todayButton';
+import TodayButton, { TodayButtonImperativeMethods } from './todayButton';
 
 export interface CalendarContextProviderProps extends ViewProps {
   /** Initial date in 'yyyy-MM-dd' format. Default = now */
@@ -63,7 +63,7 @@ const CalendarProvider = (props: CalendarContextProviderProps) => {
     children
   } = props;
   const style = useRef(styleConstructor(theme));
-  const todayButton = useRef<TodayButtonImperativeMethods>();
+  const todayButton = useRef<TodayButtonImperativeMethods>(null);
   const prevDate = useRef(date);
   const currDate = useRef(date); // for setDate only to keep prevDate up to date
   const [currentDate, setCurrentDate] = useState(date);
@@ -91,7 +91,7 @@ const CalendarProvider = (props: CalendarContextProviderProps) => {
   const _setDate = useCallback((date: string, updateSource: UpdateSources) => {
     prevDate.current = currDate.current;
     currDate.current = date;
-    
+
     setCurrentDate(date);
     if (!includes(disableAutoDaySelection, updateSource as string)) {
       setSelectedDate(date);
