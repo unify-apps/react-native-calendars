@@ -1,11 +1,11 @@
-import {RefObject, useCallback, useEffect, useRef, useState} from 'react';
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 import inRange from 'lodash/inRange';
 import times from 'lodash/times';
 import debounce from 'lodash/debounce';
 
 import constants from '../commons/constants';
-import {generateDay} from '../dateutils';
+import { generateDay } from '../dateutils';
 
 export const PAGES_COUNT = 100;
 export const NEAR_EDGE_THRESHOLD = 10;
@@ -18,10 +18,11 @@ interface UseTimelinePagesProps {
   shouldFixRTL: boolean;
 }
 
-const UseTimelinePages = ({date, listRef, numberOfDays, shouldFixRTL}: UseTimelinePagesProps) => {
+
+const UseTimelinePages = ({ date, listRef, numberOfDays, shouldFixRTL }: UseTimelinePagesProps) => {
   const pagesRef = useRef(
     times(PAGES_COUNT, i => {
-      return generateDay(date, numberOfDays * (i - Math.floor(PAGES_COUNT / 2)));
+      return generateDay(date, (i - Math.floor(PAGES_COUNT / 2)));
     })
   );
 
@@ -30,7 +31,7 @@ const UseTimelinePages = ({date, listRef, numberOfDays, shouldFixRTL}: UseTimeli
 
   useEffect(() => {
     const updatedDays = times(PAGES_COUNT, i => {
-      return generateDay(date, numberOfDays * (i - Math.floor(PAGES_COUNT / 2)));
+      return generateDay(date, i - Math.floor(PAGES_COUNT / 2));
     });
     pagesRef.current = updatedDays;
     setPages(updatedDays);
@@ -54,7 +55,7 @@ const UseTimelinePages = ({date, listRef, numberOfDays, shouldFixRTL}: UseTimeli
 
   const resetPages = (date: string) => {
     pagesRef.current = times(PAGES_COUNT, i => {
-      return generateDay(date, numberOfDays * (i - Math.floor(PAGES_COUNT / 2)));
+      return generateDay(date, i - Math.floor(PAGES_COUNT / 2));
     });
     setPages(pagesRef.current);
 
@@ -66,9 +67,9 @@ const UseTimelinePages = ({date, listRef, numberOfDays, shouldFixRTL}: UseTimeli
 
   return {
     resetPages: useCallback(resetPages, []),
-    resetPagesDebounce: useCallback(debounce(resetPages, 500, {leading: false, trailing: true}), []),
+    resetPagesDebounce: useCallback(debounce(resetPages, 500, { leading: false, trailing: true }), []),
     scrollToPage: useCallback(scrollToPage, []),
-    scrollToPageDebounce: useCallback(debounce(scrollToPage, 250, {leading: false, trailing: true}), []),
+    scrollToPageDebounce: useCallback(debounce(scrollToPage, 250, { leading: false, trailing: true }), []),
     pagesRef,
     pages,
     shouldResetPages,
