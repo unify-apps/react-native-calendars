@@ -22,6 +22,14 @@ export function isPreviousMonth(nextDate?: XDate, currentDate?: XDate) {
     (nextDate?.getFullYear() - currentDate?.getFullYear()) * 12 + nextDate?.getMonth() - currentDate?.getMonth() === -1
   );
 }
+
+export function isNextMonth(nextDate?: XDate, currentDate?: XDate) {
+  if (!isValidXDate(nextDate) || !isValidXDate(currentDate)) {
+    return false;
+  }
+
+  return (nextDate?.getFullYear() - currentDate?.getFullYear()) * 12 + nextDate?.getMonth() - currentDate?.getMonth() === 1;
+}
 export function sameDate(a?: XDate, b?: XDate) {
   if (!isValidXDate(a) || !isValidXDate(b)) {
     return false;

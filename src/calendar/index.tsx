@@ -15,7 +15,7 @@ import styleConstructor from './style';
 import CalendarHeader, { CalendarHeaderProps } from './header';
 import Day, { DayProps } from './day/index';
 import BasicDay from './day/basic';
-import { page, isGTE, isLTE, sameMonth, isPreviousMonth } from '../dateutils';
+import { page, isGTE, isLTE, sameMonth, isPreviousMonth, isNextMonth } from '../dateutils';
 import { JSX } from 'react';
 
 export interface CalendarProps extends CalendarHeaderProps, DayProps {
@@ -36,7 +36,8 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   /** Collection of dates that have to be marked */
   markedDates?: MarkedDates;
   /** Do not show days of other months in month page */
-  hideExtraDays?: boolean;
+  hideNextMonthDays?: boolean;
+  hidePreviousMonthDays?: boolean;
   /** Always show six weeks on each month (only when hideExtraDays = false) */
   showSixWeeks?: boolean;
   /** Handler which gets executed on day press */
@@ -89,7 +90,8 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     onVisibleMonthsChange,
     disableMonthChange,
     enableSwipeMonths,
-    hideExtraDays,
+    hideNextMonthDays,
+    hidePreviousMonthDays,
     firstDay,
     showSixWeeks,
     displayLoadingIndicator,
@@ -210,7 +212,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
   const renderDay = (day, id) => {
     // if user asks to hide extra days, we hide the days that are not in the current month
     // if user asks to show six weeks, we hide the days that are in the previous month.
-    if ((!sameMonth(day, currentMonth) && hideExtraDays) || (isPreviousMonth(day, currentMonth) && showSixWeeks)) {
+    if (isPreviousMonth(day, currentMonth) && hidePreviousMonthDays || (isNextMonth(day, currentMonth) && hideNextMonthDays)) {
       return <View key={id} style={style.emptyDayContainer} />;
     }
     const dayProps = extractDayProps(props);
@@ -250,7 +252,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     );
   };
   const renderMonth = () => {
-    const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
+    const shouldShowSixWeeks = showSixWeeks && !(hidePreviousMonthDays && hideNextMonthDays);
     const days = page(currentMonth, firstDay, shouldShowSixWeeks);
     const weeks: JSX.Element[] = [];
     while (days.length) {
