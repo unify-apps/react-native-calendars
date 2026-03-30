@@ -1,6 +1,6 @@
 {
   "name": "@unifyapps/react-native-calendars",
-  "version": "1.22.0-ua.13",
+  "version": "1.22.0-ua.14",
   "main": "src/index.ts",
   "types": "src/index.d.ts",
   "description": "React Native Calendar Components",
