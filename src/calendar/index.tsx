@@ -36,6 +36,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   /** Collection of dates that have to be marked */
   markedDates?: MarkedDates;
   /** Do not show days of other months in month page */
+  hideExtraDays?: boolean;
   hideNextMonthDays?: boolean;
   hidePreviousMonthDays?: boolean;
   /** Always show six weeks on each month (only when hideExtraDays = false) */
@@ -92,6 +93,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     enableSwipeMonths,
     hideNextMonthDays,
     hidePreviousMonthDays,
+    hideExtraDays,
     firstDay,
     showSixWeeks,
     displayLoadingIndicator,
@@ -212,7 +214,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
   const renderDay = (day, id) => {
     // if user asks to hide extra days, we hide the days that are not in the current month
     // if user asks to show six weeks, we hide the days that are in the previous month.
-    if (isPreviousMonth(day, currentMonth) && hidePreviousMonthDays || (isNextMonth(day, currentMonth) && hideNextMonthDays)) {
+    if (isPreviousMonth(day, currentMonth) && (hidePreviousMonthDays || hideExtraDays) || isNextMonth(day, currentMonth) && (hideNextMonthDays || hideExtraDays)) {
       return <View key={id} style={style.emptyDayContainer} />;
     }
     const dayProps = extractDayProps(props);
