@@ -11,12 +11,11 @@ import XDate from 'xdate';
 import React, { forwardRef, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import {
   SectionList,
-  DefaultSectionT,
   SectionListData,
   NativeSyntheticEvent,
   NativeScrollEvent,
   LayoutChangeEvent,
-  ViewToken
+  ListViewToken
 } from 'react-native';
 
 import { useDidUpdate, useCombinedRefs } from '../../hooks';
@@ -158,7 +157,7 @@ const AgendaList = forwardRef((props: AgendaListProps, ref: any) => {
     }
   }, 1000, { leading: true, trailing: true }), [viewOffset, sections]);
 
-  const _onViewableItemsChanged = useCallback((info: { viewableItems: Array<ViewToken>; changed: Array<ViewToken> }) => {
+  const _onViewableItemsChanged = useCallback((info: { viewableItems: Array<ListViewToken>; changed: Array<ListViewToken> }) => {
     if (info?.viewableItems && !sectionScroll.current) {
       const topSection = get(info?.viewableItems[0], 'section.title');
       if (topSection && topSection !== _topSection.current) {
@@ -206,7 +205,7 @@ const AgendaList = forwardRef((props: AgendaListProps, ref: any) => {
     sectionHeight.current = event.nativeEvent.layout.height;
   }, []);
 
-  const _renderSectionHeader = useCallback((info: { section: SectionListData<any, DefaultSectionT> }) => {
+  const _renderSectionHeader = useCallback((info: { section: SectionListData<any> }) => {
     const title = info?.section?.title;
 
     if (renderSectionHeader) {

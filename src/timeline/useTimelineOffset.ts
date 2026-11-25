@@ -1,10 +1,10 @@
-import {useCallback, useEffect, MutableRefObject} from 'react';
+import {useCallback, useEffect, RefObject, ComponentRef} from 'react';
 import {ScrollView} from 'react-native';
 
 interface UseTimelineOffsetProps {
   onChangeOffset?: (offset: number) => void;
   scrollOffset?: number;
-  scrollViewRef: MutableRefObject<ScrollView | undefined>;
+  scrollViewRef: RefObject<ComponentRef<typeof ScrollView> | null>;
   isCurrentDay?: boolean;
 }
 

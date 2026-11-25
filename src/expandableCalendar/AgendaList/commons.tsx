@@ -1,9 +1,9 @@
 import isEqual from 'lodash/isEqual';
 import React from 'react';
-import {DefaultSectionT, SectionListProps, Text, TextProps, ViewStyle} from 'react-native';
+import {SectionListProps, Text, TextProps, ViewStyle} from 'react-native';
 import {Theme} from '../../types';
 
-export interface AgendaListProps extends SectionListProps<any, DefaultSectionT> {
+export interface AgendaListProps extends SectionListProps<any> {
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
   /** day format in section title. Formatting values: http://arshaw.com/xdate/#Formatting */

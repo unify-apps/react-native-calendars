@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useMemo } from 'react';
-import { TouchableWithoutFeedback, TouchableOpacity, Text, View, ViewStyle, ViewProps, TextStyle, StyleProp } from 'react-native';
+import { TouchableWithoutFeedback, TouchableOpacity, Text, View, ViewStyle, ViewProps, TextStyle, StyleProp, ColorValue } from 'react-native';
 import { xdateToData } from '../../../interface';
 import { Theme, DayState, DateData } from '../../../types';
 import Marking, { MarkingProps } from '../marking';
 import styleConstructor from './style';
 import { useWindowDimensions } from 'react-native';
+
+type FillerStyle = { backgroundColor?: ColorValue; left?: number; right?: number };
 
 
 export interface PeriodDayProps extends ViewProps {
@@ -138,8 +140,8 @@ const PeriodDay = (props: PeriodDayProps) => {
     return textStyle;
   }, [marking, isDisabled, isInactive, isToday]);
   const fillerStyles = useMemo(() => {
-    const leftFillerStyle: ViewStyle = { backgroundColor: undefined };
-    const rightFillerStyle: ViewStyle = { backgroundColor: undefined };
+    const leftFillerStyle: FillerStyle = { backgroundColor: undefined };
+    const rightFillerStyle: FillerStyle = { backgroundColor: undefined };
     let fillerStyle = {};
     const start = markingStyle.startingDay;
     const end = markingStyle.endingDay;

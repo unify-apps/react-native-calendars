@@ -8,7 +8,6 @@ import XDate from 'xdate';
 
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  DefaultSectionT,
   SectionListData
 } from 'react-native';
 
@@ -59,7 +58,7 @@ const InfiniteAgendaList = ({
   const dataRef = useRef(data);
 
   useEffect(() => {
-    const items = sections.reduce((acc: any, cur: any) => {
+    const items = sections.reduce<any[]>((acc, cur: any) => {
       return [...acc, { title: cur.title, isTitle: true }, ...cur.data];
     }, []);
     setData(items);
@@ -213,7 +212,7 @@ const InfiniteAgendaList = ({
 
   const headerTextStyle = useMemo(() => [style.current.sectionText, sectionStyle], [sectionStyle]);
 
-  const _renderSectionHeader = useCallback((info: { section: SectionListData<any, DefaultSectionT> }) => {
+  const _renderSectionHeader = useCallback((info: { section: SectionListData<any> }) => {
     const title = info?.section?.title;
 
     if (renderSectionHeader) {

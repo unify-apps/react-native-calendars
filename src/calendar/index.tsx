@@ -18,7 +18,7 @@ import BasicDay from './day/basic';
 import { page, isGTE, isLTE, sameMonth, isPreviousMonth, isNextMonth } from '../dateutils';
 import { JSX } from 'react';
 
-export interface CalendarProps extends CalendarHeaderProps, DayProps {
+export interface CalendarProps extends CalendarHeaderProps, Omit<DayProps, keyof CalendarHeaderProps> {
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
   /** Specify style for calendar container element */
