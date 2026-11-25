@@ -359,7 +359,7 @@ const Timeline = (props: TimelineProps) => {
     return map(pageDates, d => groupedEvents[d] || []);
   }, [pageDates, groupedEvents]);
 
-  const scrollView = useRef<ScrollView | undefined>(undefined);
+  const scrollView = useRef<React.ComponentRef<typeof ScrollView> | null>(null);
   const calendarHeight = useMemo(() => (end - start) * HOUR_BLOCK_HEIGHT, [end, start]);
   const styles = useMemo(
     () => styleConstructor(theme || props.styles, calendarHeight),
@@ -481,7 +481,6 @@ const Timeline = (props: TimelineProps) => {
       />
 
       <ScrollView
-        // @ts-expect-error -- type is correct.
         ref={scrollView}
         style={styles.container}
         contentContainerStyle={[styles.contentStyle, { width: constants.screenWidth }]}

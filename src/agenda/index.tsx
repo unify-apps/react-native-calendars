@@ -98,7 +98,7 @@ export default class Agenda extends Component<AgendaProps, State> {
   private _isMounted: boolean | undefined;
   private scrollPad: React.RefObject<any> = React.createRef();
   private calendar: React.RefObject<CalendarListImperativeMethods | null> = React.createRef();
-  private knob: React.RefObject<View | null> = React.createRef();
+  private knob: React.RefObject<React.ComponentRef<typeof View> | null> = React.createRef();
   public list: React.RefObject<ReservationList | null> = React.createRef();
 
   constructor(props: AgendaProps) {

@@ -1,6 +1,6 @@
 import XDate from 'xdate';
 import React, {useCallback, useContext, useMemo, useRef, useState} from 'react';
-import {FlatList, View, ViewToken} from 'react-native';
+import {FlatList, View, ListViewToken} from 'react-native';
 import {sameWeek, onSameDateRange, getWeekDates} from '../../dateutils';
 import {toMarkingFormat} from '../../interface';
 import {DateData, MarkedDates} from '../../types';
@@ -171,7 +171,7 @@ const WeekCalendar = (props: WeekCalendarProps) => {
     list?.current?.scrollToIndex({index: NUMBER_OF_PAGES, animated: false});
   }, [firstDay, numberOfDays]);
 
-  const onViewableItemsChanged = useCallback(({viewableItems}: { viewableItems: Array<ViewToken>}) => {
+  const onViewableItemsChanged = useCallback(({viewableItems}: { viewableItems: Array<ListViewToken>}) => {
     if (changedItems.current || viewableItems.length === 0) {
       changedItems.current = false;
       return;

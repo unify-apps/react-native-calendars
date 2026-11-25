@@ -21,7 +21,7 @@ const CALENDAR_HEIGHT = 360;
 const PAST_SCROLL_RANGE = 50;
 const FUTURE_SCROLL_RANGE = 50;
 
-export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem'> {
+export interface CalendarListProps extends CalendarProps, Omit<FlatListProps<any>, 'data' | 'renderItem' | keyof CalendarProps> {
   /** Max amount of months allowed to scroll to the past. Default = 50 */
   pastScrollRange?: number;
   /** Max amount of months allowed to scroll to the future. Default = 50 */
@@ -253,7 +253,6 @@ const CalendarList = (props: CalendarListProps & ContextProp, ref: any) => {
         markedDates={getMarkedDatesForItem(item)}
         item={item}
         style={calendarStyle}
-        // @ts-expect-error - type mismatch - ScrollView's 'horizontal' is nullable
         horizontal={horizontal}
         calendarWidth={calendarWidth}
         calendarHeight={calendarHeight}
